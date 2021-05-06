@@ -1,3 +1,10 @@
+/* Primary: 194350 */
+/* Secondary: ff8882 */
+/* https://colorhunt.co/palette/273371 */
+a {
+  color: inherit;
+}
+
 .login {
   background-color: beige;
   width: 100%;
@@ -36,7 +43,7 @@
   color: #fff;
 }
 
-.error-notification {
+.notification {
   z-index: 100;
   position: absolute;
   background-color: red;
@@ -46,13 +53,19 @@
   justify-content: center;
   align-content: center;
   border-radius: 4px;
+  transition: 0.5s ease-in;
 }
-
-.active-notification {
+.error-notification {
+  background-color: red;
   top: 20px;
 }
 
-.error-notification p {
+.success-notification {
+  background-color: green;
+  top: 20px;
+}
+
+.notification p {
   color: #fff;
   padding: 15px;
   margin: 0 auto;
@@ -65,4 +78,38 @@
 
 .signup a {
   color: inherit;
+}
+
+.nav {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  background-color: #194350;
+  color: #fff;
+  justify-content: space-evenly;
+}
+
+.nav div {
+  border: 1px solid #000;
+}
+.nav .appname {
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #000;
+  display: inline-flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav .action {
+  width: 100px;
+  font-weight: bold;
+  padding-right: 20px;
+  border: 1px solid #000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.5em;
 }

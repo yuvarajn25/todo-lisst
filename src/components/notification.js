@@ -1,23 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 
-export default function Notification({ message, type, onComplete }) {
-  const [msg, setMsg] = useState(message?.msg);
+const Notification = forwardRef((props, ref) => {
+  const [value, setValue] = useState(false);
+  const [type, setType] = useState(null);
+  const [message, setMessage] = useState(null);
+
+  const showNotification = (type, message) => {
+    setValue(true);
+    setType(type);
+    setMessage(message);
+  };
+  const hideNotification = () => {
+    setValue(false);
+  };
+
+  useImperativeHandle(ref, () => {
+    return {
+      showNotification,
+    };
+  });
+
   useEffect(() => {
-    setMsg(message?.message);
-    if (message)
+    if (value)
       setTimeout(() => {
-        onComplete(null);
-      }, 2000);
-  }, [message, onComplete]);
+        hideNotification(null);
+      }, 1500);
+  }, [value]);
 
-  const className = message
-    ? `${type}-notification active-notification`
-    : `${type}-notification`;
+  const className = value
+    ? `notification ${type}-notification`
+    : `notification`;
 
-  console.log(className);
   return (
     <div className={className}>
-      <p>{msg}</p>
+      <p>{message}</p>
     </div>
   );
-}
+});
+
+export default Notification;

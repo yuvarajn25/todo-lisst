@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import supabase from "../server";
-import Notification from "./notification";
 
-export default function Login({ isLogin }) {
-  const [error, setError] = useState(null);
+export default function Login({ isLogin, onNotification, history }) {
   const submit = async (event) => {
     event.preventDefault();
     const {
@@ -18,19 +15,19 @@ export default function Login({ isLogin }) {
     };
 
     if (isLogin) {
-      const { user, session, error } = await supabase.auth.signIn(params);
-      console.log({ user, session });
-      if (error) setError(error);
+      const { error } = await supabase.auth.signIn(params);
+      if (error) {
+        onNotification("error", error.message);
+      } else {
+        history.push("/home");
+      }
     } else {
-      console.log("heree");
-      const { user, session, error } = await supabase.auth.signUp(params);
-      if (error) setError(error);
+      const { error } = await supabase.auth.signUp(params);
+      if (error) onNotification("error", error.message);
     }
   };
-  console.log({ isLogin });
   return (
     <div>
-      <Notification type="error" message={error} onComplete={setError} />
       <div className="login">
         <form onSubmit={submit}>
           <input
