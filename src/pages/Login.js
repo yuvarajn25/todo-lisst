@@ -1,7 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import supabase from "../server";
 
-export default function Login({ isLogin, onNotification, history }) {
+export default function Login({ isLogin, onNotification }) {
+  let history = useHistory();
+
+  if (supabase.auth.session) history.push("/home");
+
   const submit = async (event) => {
     event.preventDefault();
     const {
@@ -18,9 +22,8 @@ export default function Login({ isLogin, onNotification, history }) {
       const { error } = await supabase.auth.signIn(params);
       if (error) {
         onNotification("error", error.message);
-      } else {
-        history.push("/home");
       }
+      history.push("/home");
     } else {
       const { error } = await supabase.auth.signUp(params);
       if (error) onNotification("error", error.message);

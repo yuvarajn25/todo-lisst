@@ -27,11 +27,30 @@ function App() {
 
   console.log({ session });
 
+  const PrivateRoute = ({ component: Component, ...rest }) => {
+    return (
+      // Show the component only when the user is logged in
+      // Otherwise, redirect the user to /signin page
+      <Route
+        {...rest}
+        render={(props) =>
+          session ? (
+            <div>
+              <Navigaion onNotification={showNotification} />
+              <Component {...props} />
+            </div>
+          ) : (
+            <Redirect to="/login" />
+          )
+        }
+      />
+    );
+  };
+
   return (
     <div>
       <Router>
         <Notification ref={ref} />
-        {/* <Navigaion onNotification={showNotification} /> */}
         <Switch>
           <Route
             exact
@@ -50,7 +69,7 @@ function App() {
           <Route exact path="/signup">
             <Login isLogin={false} onNotification={showNotification} />
           </Route>
-          <Route exact path="/home" component={Home} />
+          <PrivateRoute exact path="/home" component={Home} />
         </Switch>
       </Router>
     </div>
