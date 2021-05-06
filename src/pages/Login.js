@@ -4,7 +4,7 @@ import supabase from "../server";
 export default function Login({ isLogin, onNotification }) {
   let history = useHistory();
 
-  if (supabase.auth.session) history.push("/home");
+  if (supabase.auth.session()) history.push("/home");
 
   const submit = async (event) => {
     event.preventDefault();
