@@ -1,38 +1,68 @@
-.App {
-  text-align: center;
+.login {
+  background-color: beige;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.login form {
+  border: 5px royalblue;
+  border-radius: 5pc;
   display: flex;
   flex-direction: column;
-  align-items: center;
+}
+
+.login form input.field {
+  border: 0px;
+  padding: 10px;
+  margin: 10px;
+  width: 300px;
+}
+.login form input.field {
+  border: 0px;
+  padding: 10px;
+  margin: 10px;
+  width: 300px;
+}
+
+.login form input[type="submit"] {
+  border: 0px;
+  padding: 10px;
+  margin: 10px;
+  background-color: royalblue;
+  color: #fff;
+}
+
+.error-notification {
+  z-index: 100;
+  position: absolute;
+  background-color: red;
+  top: -200px;
+  left: 40%;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-content: center;
+  border-radius: 4px;
 }
 
-.App-link {
-  color: #61dafb;
+.active-notification {
+  top: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.error-notification p {
+  color: #fff;
+  padding: 15px;
+  margin: 0 auto;
+  font-weight: bold;
+}
+.signup {
+  text-align: center;
+  color: blue;
+}
+
+.signup a {
+  color: inherit;
 }
