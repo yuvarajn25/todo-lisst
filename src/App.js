@@ -22,7 +22,6 @@ function App() {
 
   supabase.auth.onAuthStateChange((event, session) => {
     setSession(session);
-    console.log(event, session);
   });
 
   console.log({ session });
@@ -69,7 +68,11 @@ function App() {
           <Route exact path="/signup">
             <Login isLogin={false} onNotification={showNotification} />
           </Route>
-          <PrivateRoute exact path="/home" component={Home} />
+          <PrivateRoute
+            exact
+            path="/home"
+            component={() => <Home onNotification={showNotification} />}
+          />
         </Switch>
       </Router>
     </div>
