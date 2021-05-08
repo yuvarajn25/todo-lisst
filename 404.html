@@ -5,16 +5,7 @@
     <title>TODO List</title>
     <script type="text/javascript">
       var pathSegmentsToKeep = 0;
-      console.log(
-        l.protocol +
-          "//" +
-          l.hostname +
-          (l.port ? ":" + l.port : "") +
-          l.pathname.split("/").slice(0, 2).join("/") +
-          "/" +
-          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
-          l.hash
-      );
+
       var l = window.location;
 
       const hostname = l.hostname;
