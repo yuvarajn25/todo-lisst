@@ -5,14 +5,28 @@
     <title>TODO List</title>
     <script type="text/javascript">
       var pathSegmentsToKeep = 0;
-
-      var l = window.location;
-      l.replace(
+      console.log(
         l.protocol +
           "//" +
           l.hostname +
           (l.port ? ":" + l.port : "") +
           l.pathname.split("/").slice(0, 2).join("/") +
+          "/" +
+          (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+          l.hash
+      );
+      var l = window.location;
+
+      const hostname = l.hostname;
+      const pathName = hostname.includes("github.io")
+        ? l.pathname.split("/").slice(0, 2).join("/")
+        : "";
+      l.replace(
+        l.protocol +
+          "//" +
+          l.hostname +
+          (l.port ? ":" + l.port : "") +
+          pathName +
           "/" +
           (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
           l.hash
