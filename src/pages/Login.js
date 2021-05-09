@@ -1,7 +1,10 @@
 import { Link, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import { showNotification } from "../redux/actions/notification";
+
 import supabase from "../server";
 
-export default function Login({ isLogin, onNotification }) {
+function Login({ isLogin, dispatch }) {
   let history = useHistory();
 
   if (supabase.auth.session()) history.push("/home");
@@ -21,12 +24,12 @@ export default function Login({ isLogin, onNotification }) {
     if (isLogin) {
       const { error } = await supabase.auth.signIn(params);
       if (error) {
-        onNotification("error", error.message);
+        dispatch(showNotification("error", error.message));
       }
       history.push("/home");
     } else {
       const { error } = await supabase.auth.signUp(params);
-      if (error) onNotification("error", error.message);
+      if (error) dispatch(showNotification("error", error.message));
     }
   };
   return (
@@ -58,3 +61,5 @@ export default function Login({ isLogin, onNotification }) {
     </div>
   );
 }
+
+export default connect()(Login);

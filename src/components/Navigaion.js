@@ -1,19 +1,21 @@
 import { Link } from "react-router-dom";
 import { FaPowerOff } from "react-icons/fa";
 import supabase from "../server";
+import { connect } from "react-redux";
+import { showNotification } from "../redux/actions/notification";
 
-export default function Navigation({ onNotification }) {
+function Navigation({ dispatch }) {
   const logoff = () => {
     const { error } = supabase.auth.signOut();
-    if (error) onNotification("error", error.message);
+    if (error) dispatch(showNotification("error", error.message));
     else {
-      onNotification("success", "Logged Out");
+      dispatch(showNotification("success", "Logged Out"));
     }
   };
 
   return (
     <div className="nav">
-      <div>asdsad</div>
+      <div></div>
       <div className="appname">
         <Link to="/home">TODO List</Link>
       </div>
@@ -23,3 +25,5 @@ export default function Navigation({ onNotification }) {
     </div>
   );
 }
+
+export default connect()(Navigation);

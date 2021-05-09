@@ -1,41 +1,43 @@
-import supabase from "../server";
-import { useState } from "react";
+import { connect } from "react-redux";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useState, useEffect } from "react";
 
-export default function TaskItem(props) {
-  const [task, setTask] = useState(props.task);
+function TaskItem({ todo, onSave, onDelete }) {
+  const [localTodo, saveLocalTodo] = useState(todo);
 
   const handleCheckBox = (event) => {
-    if (!task.is_completed) {
-      task.completed_date = parseInt(Date.now() / 1000);
+    if (!localTodo.is_completed) {
+      localTodo.completed_date = parseInt(Date.now() / 1000);
     }
-    props.onSave({ ...task, is_completed: !task.is_completed });
+    onSave({ ...localTodo, is_completed: !localTodo.is_completed });
   };
 
   const handleTaskText = (event) => {
-    setTask({ ...task, task: event.target.value });
+    saveLocalTodo({ ...localTodo, task: event.target.value });
   };
 
-  if (!task) return <div></div>;
+  if (!localTodo) return <div></div>;
   return (
     <div className="task-item">
       <input
         type="checkbox"
-        checked={task.is_completed}
+        checked={localTodo.is_completed}
         onChange={handleCheckBox}
-        style={!task.id ? { visibility: "hidden" } : {}}
+        style={!localTodo.id ? { visibility: "hidden" } : {}}
       />
       <input
         type="text"
-        value={task.task}
+        value={localTodo.task}
         onChange={handleTaskText}
-        onBlur={() => props.onSave(task)}
-        placeholder={!task.id ? "+ Add New" : ""}
+        onBlur={() => onSave(localTodo)}
+        placeholder={!localTodo.id ? "+ Add New" : ""}
       />
       <RiDeleteBin6Line
-        onClick={() => props.onDelete(task.id)}
-        style={!task.id && { visibility: "hidden" }}
+        onClick={() => onDelete(localTodo)}
+        style={!localTodo.id && { visibility: "hidden" }}
       />
     </div>
   );
 }
+
+export default connect()(TaskItem);

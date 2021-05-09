@@ -1,63 +1,43 @@
 import { useEffect, useState } from "react";
+import { connect } from "react-redux";
 import TaskItem from "../components/TaskItem";
-import supabase from "../server";
+import { getTodos, saveTodo, deleteTodo } from "../redux/actions/todo";
 
-export default function TaskList({ onNotification, header, isCompleted }) {
-  const [tasks, setTasks] = useState([]);
-
+function TaskList({ dispatch, header, isCompleted, todos }) {
+  console.log({ isCompleted, todos });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    if (tasks.length) return;
-    const fetchData = async () => {
-      let { data, error } = await supabase
-        .from("to_do")
-        .select("*")
-        .eq("is_completed", isCompleted)
-        .order("created_date");
-      if (error) {
-        onNotification("error", error.message);
-        return;
-      }
-      const localTasks = data;
-      !isCompleted &&
-        localTasks.push({
-          is_completed: false,
-          task: "",
-        });
-      setTasks(localTasks);
-    };
+    if (todos.length) return;
+    dispatch(getTodos(isCompleted));
+  }, [dispatch, todos]);
 
-    fetchData();
-  }, [tasks]);
-
-  const saveTask = async (task) => {
-    if (task.task === "") return;
-    if (!task.id) task.created_date = parseInt(Date.now() / 1000);
-    const { data, error } = await supabase
-      .from("to_do")
-      .insert([task], { upsert: true });
-
-    if (error) this.props.onNotification("error", error.message);
-    setTasks([]);
+  const onSaveTodo = async (todo) => {
+    if (todo.task === "") return;
+    if (!todo.id) todo.created_date = parseInt(Date.now() / 1000);
+    dispatch(saveTodo(todo));
   };
 
-  const deleteTask = async (taskId) => {
-    const { data, error } = await supabase
-      .from("to_do")
-      .delete()
-      .eq("id", taskId);
-    if (error) this.props.onNotification("error", error.message);
-    setTasks([]);
+  const onDeleteTodo = async (todo) => {
+    dispatch(deleteTodo(todo));
   };
 
   return (
     <div className="todo-pending">
       <div>
         <h2>{header}</h2>
-        {tasks.map((task) => (
-          <TaskItem task={task} onSave={saveTask} onDelete={deleteTask} />
+        {todos.map((todo) => (
+          <TaskItem todo={todo} onSave={onSaveTodo} onDelete={onDeleteTodo} />
         ))}
+        {!isCompleted && (
+          <TaskItem
+            todo={{ is_completed: false, task: "" }}
+            onSave={onSaveTodo}
+            onDelete={onDeleteTodo}
+          />
+        )}
       </div>
     </div>
   );
 }
+
+export default connect()(TaskList);

@@ -3,7 +3,7 @@ import supabase from "./server";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Navigaion from "./components/Navigaion";
-import Notification from "./components/notification";
+import Notification from "./components/Notification";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,20 +11,16 @@ import {
   Redirect,
 } from "react-router-dom";
 import { useState, useRef } from "react";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 function App() {
   const [session, setSession] = useState(supabase.auth.session());
   const ref = useRef(null);
 
-  const showNotification = (type, message) => {
-    ref.current.showNotification(type, message);
-  };
-
   supabase.auth.onAuthStateChange((event, session) => {
     setSession(session);
   });
-
-  console.log({ session });
 
   const PrivateRoute = ({ component: Component, ...rest }) => {
     return (
@@ -35,7 +31,7 @@ function App() {
         render={(props) =>
           session ? (
             <div>
-              <Navigaion onNotification={showNotification} />
+              <Navigaion />
               <Component {...props} />
             </div>
           ) : (
@@ -47,7 +43,7 @@ function App() {
   };
 
   return (
-    <div>
+    <Provider store={store}>
       <Router>
         <Notification ref={ref} />
         <Switch>
@@ -63,19 +59,15 @@ function App() {
             }}
           />
           <Route exact path="/login">
-            <Login isLogin={true} onNotification={showNotification} />
+            <Login isLogin={true} />
           </Route>
           <Route exact path="/signup">
-            <Login isLogin={false} onNotification={showNotification} />
+            <Login isLogin={false} />
           </Route>
-          <PrivateRoute
-            exact
-            path="/home"
-            component={() => <Home onNotification={showNotification} />}
-          />
+          <PrivateRoute exact path="/home" component={Home} />
         </Switch>
       </Router>
-    </div>
+    </Provider>
   );
 }
 
