@@ -22,7 +22,7 @@ export const deleteTodo = (todo) => {
       .delete()
       .eq("id", todo.id);
     if (error) dispatch(showNotification("error", error.message));
-    dispatch({ type: "DELETE_TODO", todo });
+    dispatch(getTodos(todo.is_completed));
   };
 };
 
@@ -34,7 +34,7 @@ export const getTodos = (isCompleted) => {
       .eq("is_completed", isCompleted)
       .order("created_date", { ascending: true });
     if (error) dispatch(showNotification("error", error.message));
-    console.log({ isCompleted, todos });
+
     dispatch({ type: "SET_TODO", todos, isCompleted });
   };
 };

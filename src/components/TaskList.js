@@ -3,13 +3,14 @@ import { connect } from "react-redux";
 import TaskItem from "../components/TaskItem";
 import { getTodos, saveTodo, deleteTodo } from "../redux/actions/todo";
 
-function TaskList({ dispatch, header, isCompleted, todos }) {
-  console.log({ isCompleted, todos });
+function TaskList({ dispatch, header, isCompleted, todos = [] }) {
+  const [isFetched, setFetchStatus] = useState(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    if (todos.length) return;
+    if (isFetched) return;
     dispatch(getTodos(isCompleted));
-  }, [dispatch, todos]);
+    setFetchStatus(true);
+  });
 
   const onSaveTodo = async (todo) => {
     if (todo.task === "") return;
@@ -26,11 +27,17 @@ function TaskList({ dispatch, header, isCompleted, todos }) {
       <div>
         <h2>{header}</h2>
         {todos.map((todo) => (
-          <TaskItem todo={todo} onSave={onSaveTodo} onDelete={onDeleteTodo} />
+          <TaskItem
+            key={todo.id}
+            todo={todo}
+            onSave={onSaveTodo}
+            onDelete={onDeleteTodo}
+          />
         ))}
         {!isCompleted && (
           <TaskItem
             todo={{ is_completed: false, task: "" }}
+            key={0}
             onSave={onSaveTodo}
             onDelete={onDeleteTodo}
           />
@@ -40,4 +47,7 @@ function TaskList({ dispatch, header, isCompleted, todos }) {
   );
 }
 
-export default connect()(TaskList);
+const mapStateToProps = ({ todo }, props) => ({
+  todos: props.isCompleted ? todo.completedTodos : todo.pendingTodos,
+});
+export default connect(mapStateToProps)(TaskList);

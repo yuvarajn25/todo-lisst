@@ -5,14 +5,12 @@ const initialState = {
 
 const deleteFromArray = (arr, itemId) => {
   const isExists = arr.findIndex((a) => a.id === itemId);
-  console.log(`isExists`, isExists);
   if (isExists > -1) {
     arr.splice(isExists, 1);
   }
 };
 
 const pushToArray = (arr, item) => {
-  console.log({ arr, item });
   const isExists = arr.findIndex((a) => a.id === item.id);
   if (isExists > -1) {
     arr[isExists] = item;
@@ -33,7 +31,6 @@ export default function (state = initialState, action) {
         todo.is_completed ? state.pendingTodos : state.completedTodos,
         todo.id
       );
-      console.log(state);
       return {
         pendingTodos: [...state.pendingTodos],
         completedTodos: [...state.completedTodos],

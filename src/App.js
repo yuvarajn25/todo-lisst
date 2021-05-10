@@ -16,7 +16,6 @@ import store from "./redux/store";
 
 function App() {
   const [session, setSession] = useState(supabase.auth.session());
-  const ref = useRef(null);
 
   supabase.auth.onAuthStateChange((event, session) => {
     setSession(session);
@@ -45,7 +44,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <Notification ref={ref} />
+        <Notification />
         <Switch>
           <Route
             exact
